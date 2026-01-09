@@ -31,9 +31,13 @@ El recorrido típico del usuario es:
 - Presentación del proyecto.
 - Botón para iniciar o continuar.
 
+  <img width="1019" height="852" alt="image" src="https://github.com/user-attachments/assets/4ebbfe9e-6a10-4e33-9f33-c66cb0c8782e" />
+
 ###  Configuración — `configuracion.html`
 - Selección de opciones antes de jugar.
 - Botón para comenzar partida.
+
+<img width="1021" height="937" alt="image" src="https://github.com/user-attachments/assets/429da4e5-f4b6-4436-9517-cc9104e878cd" />
 
 ###  Juego — `juego.html`
 - Pantalla principal donde se muestran:
@@ -43,6 +47,8 @@ El recorrido típico del usuario es:
   - mensajes de validación (correcto/incorrecto),
   - avance de preguntas.
 
+<img width="1035" height="897" alt="image" src="https://github.com/user-attachments/assets/ce360111-5f73-4282-9da1-c0960e904b74" />
+
 ###  Resultados — `resultados.html`
 - Muestra:
   - puntaje final,
@@ -50,8 +56,12 @@ El recorrido típico del usuario es:
   - opción de reiniciar o volver al inicio,
   - consulta/registro en Supabase (si aplica).
 
+<img width="1019" height="921" alt="image" src="https://github.com/user-attachments/assets/66b7b0f2-b78d-46ef-b28a-a36ad72c6021" />
+
 ###  Créditos — `creditos.html`
 - Información del curso y los integrantes del proyecto.
+
+<img width="662" height="960" alt="image" src="https://github.com/user-attachments/assets/d1f3c4e5-7ead-49e1-b88b-8a2f7104231a" />
 
 ---
 
@@ -153,6 +163,18 @@ El sistema de puntaje puede funcionar así (ajustable según tu implementación)
   - opciones,
   - una respuesta correcta válida.
 - Probar el flujo completo: inicio → configuración → juego → resultados.
+
+---
+
+## Menu de opciones
+
+<img width="1426" height="672" alt="image" src="https://github.com/user-attachments/assets/f7e9cc0a-eca5-4e1e-8724-189b565fbce4" />
+
+---
+
+## Banco de preguntas (Con Sus Respuestas)
+
+<img width="1081" height="869" alt="image" src="https://github.com/user-attachments/assets/f8660601-a7ca-485c-b2bc-161b57063ff6" />
 
 ---
 
