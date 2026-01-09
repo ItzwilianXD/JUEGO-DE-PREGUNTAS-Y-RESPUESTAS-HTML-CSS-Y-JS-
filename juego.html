@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugando - Duelo de Preguntas</title>
+    <link rel="stylesheet" href="juego.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-info">
+                <span class="info-badge" id="modo-badge">CLASICO</span>
+                <span class="info-badge" id="dif-badge">MEDIO</span>
+            </div>
+        </div>
+
+        <div class="scoreboard">
+            <div class="player-panel">
+                <div class="player-name" id="name-p1">Jugador 1</div>
+                <div class="player-score" id="score-p1">0</div>
+                <div class="player-lives" id="lives-p1">♥♥♥</div>
+                <div class="player-streak" id="streak-p1"></div>
+            </div>
+
+            <div class="vs-indicator">VS</div>
+
+            <div class="player-panel">
+                <div class="player-name" id="name-p2">Jugador 2</div>
+                <div class="player-score" id="score-p2">0</div>
+                <div class="player-lives" id="lives-p2">♥♥♥</div>
+                <div class="player-streak" id="streak-p2"></div>
+            </div>
+        </div>
+
+        <div class="turn-indicator" id="turn-indicator">
+            Turno de: <span id="turn-player">Jugador 1</span>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">
+                Pregunta <span id="q-num">1</span> de <span id="q-total">10</span>
+            </div>
+            <div class="question-text" id="question-text">Cargando pregunta...</div>
+
+            <div class="options-grid" id="options-grid"></div>
+        </div>
+
+        <div class="timer-section">
+            <div class="timer-bar">
+                <div class="timer-fill" id="timer-fill"></div>
+            </div>
+            <div class="timer-text">Tiempo: <span id="timer-text">15</span>s</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { cargarPreguntas, guardarResultado } from './supabaseClient.js';
+
+        let preguntasGlobales = [];
+        const config = JSON.parse(localStorage.getItem('config') || '{}');
+        const gameData = {
+            jugador1: {
+                nombre: config.jugador1 || 'Jugador 1',
+                puntos: 0,
+                vidas: 3,
+                correctas: 0,
+                incorrectas: 0,
+                racha: 0,
+                rachaMax: 0
+            },
+            jugador2: {
+                nombre: config.jugador2 || 'Jugador 2',
+                puntos: 0,
+                vidas: 3,
+                correctas: 0,
+                incorrectas: 0,
+                racha: 0,
+                rachaMax: 0
+            },
+            turnoActual: 1,
+            preguntaActual: 0,
+            preguntasUsadas: [],
+            modo: config.modo || 'clasico',
+            dificultad: config.dificultad || 'medio'
+        };
+
+        const totalPreguntas = gameData.modo === 'rapido' ? 5 : gameData.modo === 'supervivencia' ? 15 : 10;
+        const tiempoPorPregunta = gameData.modo === 'rapido' ? 10 : gameData.modo === 'supervivencia' ? 20 : 15;
+
+        let tiempoRestante = tiempoPorPregunta;
+        let intervaloTiempo = null;
+
+        document.getElementById('name-p1').textContent = gameData.jugador1.nombre;
+        document.getElementById('name-p2').textContent = gameData.jugador2.nombre;
+        document.getElementById('modo-badge').textContent = gameData.modo.toUpperCase();
+        document.getElementById('dif-badge').textContent = gameData.dificultad.toUpperCase();
+        document.getElementById('q-total').textContent = totalPreguntas;
+
+        function mostrarPregunta() {
+            if (gameData.preguntaActual >= totalPreguntas) {
+                finalizarJuego();
+                return;
+            }
+
+            const preguntasDisponibles = preguntasGlobales.filter((p, idx) => {
+                if (gameData.preguntasUsadas.includes(idx)) return false;
+
+                if (gameData.dificultad === 'facil') {
+                    return p.dificultad === 'facil';
+                } else if (gameData.dificultad === 'medio') {
+                    return p.dificultad === 'facil' || p.dificultad === 'medio';
+                } else {
+                    return true;
+                }
+            });
+
+            if (preguntasDisponibles.length === 0) {
+                finalizarJuego();
+                return;
+            }
+
+            const preguntaRandom = preguntasDisponibles[Math.floor(Math.random() * preguntasDisponibles.length)];
+            const indexOriginal = preguntasGlobales.indexOf(preguntaRandom);
+            gameData.preguntasUsadas.push(indexOriginal);
+
+            document.getElementById('q-num').textContent = gameData.preguntaActual + 1;
+            document.getElementById('question-text').textContent = preguntaRandom.pregunta;
+            document.getElementById('turn-player').textContent = gameData.turnoActual === 1 ? gameData.jugador1.nombre : gameData.jugador2.nombre;
+
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
+
+            preguntaRandom.opciones.forEach((opcion, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opcion;
+                btn.onclick = () => seleccionarRespuesta(idx, preguntaRandom.correcta);
+                optionsGrid.appendChild(btn);
+            });
+
+            iniciarTemporizador();
+        }
+
+        function iniciarTemporizador() {
+            tiempoRestante = tiempoPorPregunta;
+            document.getElementById('timer-text').textContent = tiempoRestante;
+            document.getElementById('timer-fill').style.width = '100%';
+
+            clearInterval(intervaloTiempo);
+            intervaloTiempo = setInterval(() => {
+                tiempoRestante--;
+                document.getElementById('timer-text').textContent = tiempoRestante;
+                document.getElementById('timer-fill').style.width = `${(tiempoRestante / tiempoPorPregunta) * 100}%`;
+
+                if (tiempoRestante <= 0) {
+                    respuestaIncorrecta();
+                }
+            }, 1000);
+        }
+
+        function seleccionarRespuesta(seleccion, correcta) {
+            clearInterval(intervaloTiempo);
+
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correcta) btn.classList.add('correct');
+                if (idx === seleccion && seleccion !== correcta) btn.classList.add('incorrect');
+            });
+
+            if (seleccion === correcta) {
+                respuestaCorrecta();
+            } else {
+                respuestaIncorrecta();
+            }
+
+            setTimeout(() => {
+                siguienteTurno();
+            }, 1500);
+        }
+
+        function respuestaCorrecta() {
+            const jugador = gameData.turnoActual === 1 ? gameData.jugador1 : gameData.jugador2;
+            const puntosBase = gameData.dificultad === 'facil' ? 10 : gameData.dificultad === 'medio' ? 15 : 20;
+            const multiplicador = gameData.modo === 'rapido' ? 2 : 1;
+
+            jugador.puntos += puntosBase * multiplicador;
+            jugador.correctas++;
+            jugador.racha++;
+            if (jugador.racha > jugador.rachaMax) jugador.rachaMax = jugador.racha;
+
+            actualizarMarcador();
+        }
+
+        function respuestaIncorrecta() {
+            clearInterval(intervaloTiempo);
+            const jugador = gameData.turnoActual === 1 ? gameData.jugador1 : gameData.jugador2;
+            jugador.vidas--;
+            jugador.incorrectas++;
+            jugador.racha = 0;
+
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach((btn, idx) => {
+                btn.disabled = true;
+            });
+
+            actualizarMarcador();
+        }
+
+        function actualizarMarcador() {
+            document.getElementById('score-p1').textContent = gameData.jugador1.puntos;
+            document.getElementById('score-p2').textContent = gameData.jugador2.puntos;
+
+            document.getElementById('lives-p1').textContent = '♥'.repeat(gameData.jugador1.vidas);
+            document.getElementById('lives-p2').textContent = '♥'.repeat(gameData.jugador2.vidas);
+
+            document.getElementById('streak-p1').textContent = gameData.jugador1.racha >= 2 ? `🔥 ${gameData.jugador1.racha}` : '';
+            document.getElementById('streak-p2').textContent = gameData.jugador2.racha >= 2 ? `🔥 ${gameData.jugador2.racha}` : '';
+        }
+
+        function siguienteTurno() {
+            if (gameData.jugador1.vidas <= 0 || gameData.jugador2.vidas <= 0) {
+                finalizarJuego();
+                return;
+            }
+
+            gameData.turnoActual = gameData.turnoActual === 1 ? 2 : 1;
+            gameData.preguntaActual++;
+
+            mostrarPregunta();
+        }
+
+        async function finalizarJuego() {
+            clearInterval(intervaloTiempo);
+            await guardarResultado(gameData);
+            localStorage.setItem('resultados', JSON.stringify(gameData));
+            window.location.href = 'resultados.html';
+        }
+
+        async function inicializarJuego() {
+            document.getElementById('question-text').textContent = 'Cargando preguntas desde la base de datos...';
+            preguntasGlobales = await cargarPreguntas();
+
+            if (preguntasGlobales && preguntasGlobales.length > 0) {
+                mostrarPregunta();
+            } else {
+                document.getElementById('question-text').textContent = 'Error: No se pudieron cargar las preguntas';
+                console.error('No se pudieron cargar las preguntas desde Supabase');
+            }
+        }
+
+        inicializarJuego();
+    </script>
+</body>
+</html>

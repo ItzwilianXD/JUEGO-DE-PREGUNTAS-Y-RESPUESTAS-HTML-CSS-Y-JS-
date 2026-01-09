@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUÍA WEB — DUELO DE PREGUNTAS</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="lab-header">
+        <div class="header-content">
+            <div class="institution-info">
+                <h2 class="university-name">Universidad Nacional</h2>
+                <p class="school-name">Escuela Profesional de Ingeniería de Sistemas</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="lab-container">
+        <section class="lab-title-section">
+            <h1 class="lab-number">GUÍA N.º 01 - Duelo de Preguntas</h1>
+            <p class="lab-course">Curso: Desarrollo de Plataformas I</p>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.1 DATOS GENERALES</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Escuela Profesional:</span>
+                    <span class="info-value">Ingeniería de Sistemas</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Curso:</span>
+                    <span class="info-value">Desarrollo de Plataformas I</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Semestre:</span>
+                    <span class="info-value">III</span>
+                </div>
+            </div>
+        </section>
+        <section class="lab-section">
+            <h3 class="section-title">1.3 INTRODUCCIÓN</h3>
+            <p class="section-text">
+                En el desarrollo web moderno, crear experiencias interactivas mejora la motivación y el aprendizaje. Duelo de Preguntas es un juego web de preguntas y respuestas por turnos, donde los jugadores compiten respondiendo correctamente para acumular puntos.
+            </p>
+            <p class="section-text">
+                En esta guía se presenta el funcionamiento del juego, la estructura del proyecto y la conexión con una base de datos en la nube para registrar puntajes y mostrar resultados. Se aplican conceptos de HTML, CSS y JavaScript para construir una interfaz dinámica y fácil de usar.
+            </p>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.4 OBJETIVOS DE LA GUÍA</h3>
+            <p class="section-text">
+                Al finalizar la práctica, el estudiante será capaz de:
+            </p>
+            <ul class="objectives-list">
+                <li>Diseñar una interfaz clara y responsiva para un juego web.</li>
+                <li>Implementar la lógica del duelo (turnos, puntajes y validación de respuestas).</li>
+                <li>Mostrar preguntas con opciones múltiples y retroalimentación inmediata.</li>
+                <li>Registrar resultados y mostrar historial o ranking usando Supabase.</li>
+            </ul>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.5 RESULTADOS DE APRENDIZAJE</h3>
+            <ul class="learning-outcomes">
+                <li>Construye una interfaz de juego con pantallas de inicio, juego y resultados.</li>
+                <li>Valida respuestas, calcula puntajes y determina un ganador.</li>
+                <li>Guarda resultados en una base de datos y consulta puntajes.</li>
+                <li>Presenta resultados finales de forma ordenada y visual.</li>
+            </ul>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.6 SOFTWARE Y HERRAMIENTAS</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>Sistema Operativo</h4>
+                    <p>Windows / Linux</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>Navegador Web</h4>
+                    <p>Chrome / Firefox (recomendado)</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>JavaScript</h4>
+                    <p>Lógica del juego e interacción</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>VS Code + Vite</h4>
+                    <p>Entorno de desarrollo y servidor local</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>Supabase</h4>
+                    <p>Puntajes, resultados y ranking</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon"></div>
+                    <h4>Banco de Preguntas</h4>
+                    <p>Preguntas en JS / Base de datos</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.7 FUNDAMENTO TEÓRICO</h3>
+
+            <div class="theory-subsection">
+                <h4 class="subsection-title">Duelo de Preguntas (Quiz Battle)</h4>
+                <p class="section-text">
+                    Duelo de Preguntas es un juego interactivo de preguntas por turnos. Cada ronda muestra una pregunta con opciones múltiples; el jugador elige una respuesta y el sistema valida si es correcta, actualiza el puntaje y cambia el turno. Al final, se muestra el ganador y el resumen de resultados.
+                </p>
+                <div class="highlight-box">
+                    <strong>Características principales:</strong>
+                    <ul>
+                        <li>Turnos alternados entre jugadores.</li>
+                        <li>Puntaje acumulativo y definición de ganador.</li>
+                        <li>Interfaz clara con retroalimentación visual.</li>
+                        <li>Registro de resultados para historial o ranking.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="theory-subsection">
+                <h4 class="subsection-title">Lógica del juego y reglas</h4>
+
+                <div class="algorithm-card">
+                    <h5>Turnos</h5>
+                    <p>El juego asigna un turno por jugador. Al responder, el sistema valida la opción y luego cambia el turno automáticamente para mantener la dinámica justa.</p>
+                </div>
+
+                <div class="algorithm-card">
+                    <h5>Puntaje</h5>
+                    <p>Cada respuesta correcta suma puntos. Las incorrectas no suman (o pueden restar, si así se configuró). El objetivo es obtener el mayor puntaje al finalizar.</p>
+                </div>
+
+                <div class="algorithm-card">
+                    <h5>Preguntas y categorías</h5>
+                    <p>Las preguntas pueden agruparse por categorías o dificultad. Esto permite una experiencia más organizada y adaptable a distintos temas.</p>
+                </div>
+
+                <div class="algorithm-card">
+                    <h5>Resultados y ranking</h5>
+                    <p>Al terminar la partida, se muestran puntajes y ganador. Los resultados pueden guardarse para consultar historial y crear un ranking de los mejores jugadores.</p>
+                </div>
+            </div>
+
+            <div class="theory-subsection">
+                <h4 class="subsection-title">Experiencia de usuario: 3 pilares</h4>
+                <div class="three-v-grid">
+                    <div class="v-card">
+                        <div class="v-icon"></div>
+                        <h5>Claridad</h5>
+                        <p>Interfaz simple: pregunta visible, opciones claras y botones fáciles de usar.</p>
+                    </div>
+                    <div class="v-card">
+                        <div class="v-icon"></div>
+                        <h5>Velocidad</h5>
+                        <p>Respuestas rápidas: validación inmediata y transición fluida entre turnos.</p>
+                    </div>
+                    <div class="v-card">
+                        <div class="v-icon"></div>
+                        <h5>Diversión</h5>
+                        <p>Competencia por puntos, retroalimentación visual y sensación de duelo entre jugadores.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.8 ACTIVIDADES DEL LABORATORIO</h3>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-number">Actividad 1</span>
+                    <h4>Estructura y arranque del proyecto</h4>
+                </div>
+                <div class="activity-content">
+                    <p>Verificar que el proyecto cargue correctamente y que los archivos principales estén organizados.</p>
+                    <pre class="code-block"><code>
+
+// Verifica que el HTML cargue y que tu JS esté enlazado.
+// Abre el proyecto con Vite y revisa la consola del navegador.
+console.log("Duelo de Preguntas listo");
+
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-number">Actividad 2</span>
+                    <h4>Carga del banco de preguntas</h4>
+                </div>
+                <div class="activity-content">
+                    <p>Cargar preguntas desde un arreglo en JavaScript o desde la base de datos para mostrarlas en el juego.</p>
+                    <pre class="code-block"><code>
+
+// Ejemplo de preguntas en JS
+const preguntas = [
+  { pregunta: "¿Qué es HTML?", opciones: ["Lenguaje", "Base de datos", "Servidor"], correcta: 0 }
+];
+
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-number">Actividad 3</span>
+                    <h4>Mostrar pregunta y opciones</h4>
+                </div>
+                <div class="activity-content">
+                    <p>Renderizar una pregunta en pantalla y mostrar sus alternativas como botones.</p>
+                    <pre class="code-block"><code>
+
+// Render simple (idea)
+const p = preguntas[0];
+console.log(p.pregunta);
+console.log(p.opciones);
+
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-number">Actividad 4</span>
+                    <h4>Validación de respuestas</h4>
+                </div>
+                <div class="activity-content">
+                    <p>Validar si la opción marcada coincide con la respuesta correcta y actualizar el puntaje.</p>
+                    <pre class="code-block"><code>
+                        
+let puntaje = 0;
+const respuestaUsuario = 0;
+
+if (respuestaUsuario === preguntas[0].correcta) {
+  puntaje += 10;
+  console.log("Correcto ");
+} else {
+  console.log("Incorrecto ");
+}
+
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-number">Actividad 5</span>
+                    <h4>Guardar resultados</h4>
+                </div>
+                <div class="activity-content">
+                    <p>Guardar el resultado final del duelo para consultar historial o ranking.</p>
+                    <pre class="code-block"><code>
+                        
+// Idea de objeto final para guardar
+const resultado = {
+  jugador1: "Ana",
+  jugador2: "Luis",
+  puntaje1: 40,
+  puntaje2: 30,
+  ganador: "Ana"
+};
+
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.9 EVALUACIÓN PRÁCTICA</h3>
+            <p class="section-text">
+                Complete la evaluación práctica jugando el Duelo de Preguntas. Se evaluará el funcionamiento del juego, la validación de respuestas, el control de turnos y la presentación de resultados. El objetivo es lograr una experiencia clara, dinámica y sin errores.
+            </p>
+            <div class="evaluation-grid">
+                <div class="eval-card">
+                    <h4> Cuestionario Interactivo</h4>
+                    <p>Sistema de evaluación por turnos con preguntas de opción múltiple</p>
+                    <button class="btn-primary" onclick="window.location.href='menu.html'">
+                        INICIAR EVALUACIÓN
+                    </button>
+                </div>
+                <div class="eval-card">
+                    <h4> Banco de Preguntas</h4>
+                    <p>Revise todas las preguntas disponibles organizadas por categoría</p>
+                    <button class="btn-secondary" onclick="window.location.href='preguntas.html'">
+                        VER PREGUNTAS
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.10 CRITERIOS DE EVALUACIÓN</h3>
+            <table class="evaluation-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Interfaz clara y responsiva</td>
+                        <td>5 pts</td>
+                    </tr>
+                    <tr>
+                        <td>Lógica del juego (turnos y puntaje)</td>
+                        <td>5 pts</td>
+                    </tr>
+                    <tr>
+                        <td>Validación de respuestas y feedback</td>
+                        <td>5 pts</td>
+                    </tr>
+                    <tr>
+                        <td>Resultados finales y/o ranking</td>
+                        <td>5 pts</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td><strong>Total</strong></td>
+                        <td><strong>20 pts</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.11 PRODUCTO A ENTREGAR</h3>
+            <ul class="deliverables-list">
+                <li>Proyecto web funcional del Duelo de Preguntas.</li>
+                <li>Código ordenado y comentado (HTML/CSS/JS).</li>
+                <li>Capturas del juego: inicio, juego y resultados.</li>
+                <li>Breve conclusión (5-8 líneas) sobre lo aprendido.</li>
+                <li>Evidencia del registro/visualización de resultados (si aplica).</li>
+            </ul>
+        </section>
+
+        <section class="lab-section">
+            <h3 class="section-title">1.12 BIBLIOGRAFÍA</h3>
+            <ol class="bibliography-list">
+                <li>Mozilla Developer Network. (s. f.). <em>HTML</em>. https://developer.mozilla.org/es/docs/Web/HTML</li>
+                <li>Mozilla Developer Network. (s. f.). <em>JavaScript</em>. https://developer.mozilla.org/es/docs/Web/JavaScript</li>
+                <li>W3Schools. (s. f.). <em>CSS tutorial</em>. https://www.w3schools.com/css/</li>
+                <li>Supabase. (s. f.). <em>Documentation</em>. https://supabase.com/docs</li>
+                <li>Vite. (s. f.). <em>Guide</em>. https://vitejs.dev/guide/</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer class="lab-footer">
+        <p>&copy; 2026 Universidad Nacional - Escuela de Ingeniería de Sistemas</p>
+        <p>Laboratorio de Desarrollo Web — Duelo de Preguntas</p>
+    </footer>
+</body>
+</html>

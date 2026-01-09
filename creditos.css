@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.creditos-container {
+    max-width: 800px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 3rem;
+    color: #78350f;
+    margin-bottom: 10px;
+    font-weight: 900;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    color: #92400e;
+    font-weight: 300;
+}
+
+.team-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #78350f;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.member-card {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.member-card:hover {
+    box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+}
+
+.member-avatar {
+    font-size: 3rem;
+    background: #ffffff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-size: 1.3rem;
+    color: #78350f;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.member-code {
+    font-size: 1rem;
+    color: #92400e;
+    font-weight: 600;
+}
+
+.info-section {
+    margin-bottom: 40px;
+}
+
+.info-box {
+    background: #fffbeb;
+    border: 2px solid #fbbf24;
+    border-radius: 15px;
+    padding: 25px;
+    line-height: 1.8;
+}
+
+.info-box p {
+    color: #78350f;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.info-box strong {
+    color: #92400e;
+}
+
+.info-box ul {
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+.info-box li {
+    color: #92400e;
+    margin-bottom: 8px;
+}
+
+.back-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 15px;
+    background: transparent;
+    color: #92400e;
+    border: 2px solid #fbbf24;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #fffbeb;
+    box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
+}
+
+@media (max-width: 768px) {
+    .creditos-container {
+        padding: 30px 20px;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+    }
+
+    .member-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .member-avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 2.5rem;
+    }
+}

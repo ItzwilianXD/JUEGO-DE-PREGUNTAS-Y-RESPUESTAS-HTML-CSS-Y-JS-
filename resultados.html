@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Duelo de Preguntas</title>
+    <link rel="stylesheet" href="resultados.css">
+</head>
+<body>
+    <div class="results-container">
+        <div class="trophy-icon" id="trophy-icon">🏆</div>
+
+        <h1 class="result-title" id="result-title">GANADOR</h1>
+        <div class="winner-name" id="winner-name">Jugador 1</div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-player-name" id="stat-name-1">Jugador 1</div>
+                <div class="stat-points" id="stat-points-1">0 puntos</div>
+                <div class="stat-details">
+                    <div class="stat-item">
+                        <span class="stat-label">✓ Correctas:</span>
+                        <span class="stat-value" id="stat-correct-1">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">✗ Incorrectas:</span>
+                        <span class="stat-value" id="stat-incorrect-1">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label"> Racha Max:</span>
+                        <span class="stat-value" id="stat-streak-1">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-player-name" id="stat-name-2">Jugador 2</div>
+                <div class="stat-points" id="stat-points-2">0 puntos</div>
+                <div class="stat-details">
+                    <div class="stat-item">
+                        <span class="stat-label">✓ Correctas:</span>
+                        <span class="stat-value" id="stat-correct-2">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">✗ Incorrectas:</span>
+                        <span class="stat-value" id="stat-incorrect-2">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label"> Racha Max:</span>
+                        <span class="stat-value" id="stat-streak-2">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="primary-btn" onclick="window.location.href='configuracion.html'">
+                JUGAR DE NUEVO 
+            </button>
+            <button class="secondary-btn" onclick="window.location.href='menu.html'">
+                Menu Principal
+            </button>
+        </div>
+    </div>
+
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+        const resultados = JSON.parse(localStorage.getItem('resultados') || '{}');
+
+        if (resultados.jugador1 && resultados.jugador2) {
+            const j1 = resultados.jugador1;
+            const j2 = resultados.jugador2;
+
+            document.getElementById('stat-name-1').textContent = j1.nombre;
+            document.getElementById('stat-name-2').textContent = j2.nombre;
+
+            document.getElementById('stat-points-1').textContent = `${j1.puntos} puntos`;
+            document.getElementById('stat-points-2').textContent = `${j2.puntos} puntos`;
+
+            document.getElementById('stat-correct-1').textContent = j1.correctas;
+            document.getElementById('stat-correct-2').textContent = j2.correctas;
+
+            document.getElementById('stat-incorrect-1').textContent = j1.incorrectas;
+            document.getElementById('stat-incorrect-2').textContent = j2.incorrectas;
+
+            document.getElementById('stat-streak-1').textContent = j1.rachaMax;
+            document.getElementById('stat-streak-2').textContent = j2.rachaMax;
+
+            if (j1.puntos > j2.puntos) {
+                document.getElementById('result-title').textContent = 'GANADOR';
+                document.getElementById('winner-name').textContent = j1.nombre;
+                document.getElementById('trophy-icon').textContent = '';
+            } else if (j2.puntos > j1.puntos) {
+                document.getElementById('result-title').textContent = 'GANADOR';
+                document.getElementById('winner-name').textContent = j2.nombre;
+                document.getElementById('trophy-icon').textContent = '';
+            } else {
+                document.getElementById('result-title').textContent = 'EMPATE';
+                document.getElementById('winner-name').textContent = 'Ambos jugadores';
+                document.getElementById('trophy-icon').textContent = '';
+            }
+
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#fbbf24', '#f59e0b', '#3b82f6', '#ef4444', '#10b981', '#a855f7'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetto = document.createElement('div');
+                confetto.className = 'confetto';
+                confetto.style.left = Math.random() * 100 + '%';
+                confetto.style.animationDelay = Math.random() * 3 + 's';
+                confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiContainer.appendChild(confetto);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Preguntas - Duelo de Preguntas</title>
+    <link rel="stylesheet" href="preguntas.css">
+</head>
+<body>
+    <div class="preguntas-container">
+        <h1 class="page-title"> BANCO DE PREGUNTAS</h1>
+        <p class="page-subtitle">Total de preguntas: <span id="total">100</span></p>
+
+        <div class="filter-section">
+            <h3>Filtrar por dificultad:</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filtro="todas">TODAS</button>
+                <button class="filter-btn" data-filtro="facil">FACIL</button>
+                <button class="filter-btn" data-filtro="medio">MEDIO</button>
+                <button class="filter-btn" data-filtro="dificil">DIFICIL</button>
+            </div>
+        </div>
+
+        <div class="preguntas-lista" id="preguntas-container"></div>
+
+        <button class="back-btn" onclick="window.location.href='menu.html'">← Volver al Menu</button>
+    </div>
+
+    <script type="module">
+        import { cargarPreguntas } from './supabaseClient.js';
+
+        let preguntasGlobales = [];
+
+        async function inicializar() {
+            const container = document.getElementById('preguntas-container');
+            container.innerHTML = '<p style="text-align: center; padding: 40px;">Cargando preguntas...</p>';
+
+            preguntasGlobales = await cargarPreguntas();
+
+            if (preguntasGlobales && preguntasGlobales.length > 0) {
+                document.getElementById('total').textContent = preguntasGlobales.length;
+                mostrarPreguntas('todas');
+
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        mostrarPreguntas(btn.dataset.filtro);
+                    });
+                });
+            } else {
+                container.innerHTML = '<p style="text-align: center; color: red;">Error al cargar las preguntas</p>';
+            }
+        }
+
+        function mostrarPreguntas(filtro) {
+            const container = document.getElementById('preguntas-container');
+            container.innerHTML = '';
+            let contador = 0;
+
+            preguntasGlobales.forEach((pregunta, index) => {
+                if (filtro === 'todas' || pregunta.dificultad === filtro) {
+                    contador++;
+                    const item = document.createElement('div');
+                    item.className = 'pregunta-item';
+                    item.innerHTML = `
+                        <div class="pregunta-header">
+                            <span class="pregunta-num">#${contador}</span>
+                            <span class="pregunta-dif dif-${pregunta.dificultad}">${pregunta.dificultad.toUpperCase()}</span>
+                            ${pregunta.categoria ? `<span class="pregunta-cat">${pregunta.categoria}</span>` : ''}
+                        </div>
+                        <div class="pregunta-texto">${pregunta.pregunta}</div>
+                        <div class="respuesta-correcta">✓ ${pregunta.opciones[pregunta.correcta]}</div>
+                        ${pregunta.explicacion ? `<div class="pregunta-explicacion">${pregunta.explicacion}</div>` : ''}
+                    `;
+                    container.appendChild(item);
+                }
+            });
+        }
+
+        inicializar();
+    </script>
+</body>
+</html>

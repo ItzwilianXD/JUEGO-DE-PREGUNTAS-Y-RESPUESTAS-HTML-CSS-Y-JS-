@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuracion - Duelo de Preguntas</title>
+    <link rel="stylesheet" href="configuracion.css">
+</head>
+<body>
+    <div class="config-container">
+        <h1 class="config-title"> CONFIGURACION DEL JUEGO</h1>
+        <p class="config-subtitle">Personaliza tu partida</p>
+
+        <div class="config-section">
+            <h2 class="section-title"> Modo de Juego</h2>
+            <div class="options-grid">
+                <button class="option-btn selected" data-tipo="modo" data-valor="clasico">
+                    <div class="option-icon"></div>
+                    <div class="option-name">CLASICO</div>
+                    <div class="option-desc">10 preguntas · 15s por pregunta</div>
+                </button>
+                <button class="option-btn" data-tipo="modo" data-valor="rapido">
+                    <div class="option-icon"></div>
+                    <div class="option-name">RAPIDO</div>
+                    <div class="option-desc">5 preguntas · 10s · Doble puntos</div>
+                </button>
+                <button class="option-btn" data-tipo="modo" data-valor="supervivencia">
+                    <div class="option-icon"></div>
+                    <div class="option-name">SUPERVIVENCIA</div>
+                    <div class="option-desc">15 preguntas · 20s por pregunta</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h2 class="section-title"> Nivel de Dificultad</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-tipo="dificultad" data-valor="facil">
+                    <div class="option-icon"></div>
+                    <div class="option-name">FACIL</div>
+                    <div class="option-desc">10 puntos por pregunta</div>
+                </button>
+                <button class="option-btn selected" data-tipo="dificultad" data-valor="medio">
+                    <div class="option-icon"></div>
+                    <div class="option-name">MEDIO</div>
+                    <div class="option-desc">15 puntos por pregunta</div>
+                </button>
+                <button class="option-btn" data-tipo="dificultad" data-valor="dificil">
+                    <div class="option-icon"></div>
+                    <div class="option-name">DIFICIL</div>
+                    <div class="option-desc">20 puntos por pregunta</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h2 class="section-title"> Jugadores</h2>
+            <div class="players-container">
+                <div class="player-input">
+                    <label for="jugador1">Jugador 1</label>
+                    <input type="text" id="jugador1" placeholder="Ingresa tu nombre" maxlength="15">
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="player-input">
+                    <label for="jugador2">Jugador 2</label>
+                    <input type="text" id="jugador2" placeholder="Ingresa tu nombre" maxlength="15">
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="start-button" id="btn-comenzar">COMENZAR BATALLA </button>
+            <button class="cancel-button" onclick="window.location.href='menu.html'">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        const botonesOpcion = document.querySelectorAll('.option-btn');
+        const config = {
+            modo: 'clasico',
+            dificultad: 'medio'
+        };
+
+        botonesOpcion.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tipo = btn.dataset.tipo;
+                const valor = btn.dataset.valor;
+
+                document.querySelectorAll(`[data-tipo="${tipo}"]`).forEach(b => {
+                    b.classList.remove('selected');
+                });
+
+                btn.classList.add('selected');
+                config[tipo] = valor;
+            });
+        });
+
+        document.getElementById('btn-comenzar').addEventListener('click', () => {
+            const jugador1 = document.getElementById('jugador1').value.trim() || 'Jugador 1';
+            const jugador2 = document.getElementById('jugador2').value.trim() || 'Jugador 2';
+
+            localStorage.setItem('config', JSON.stringify({
+                ...config,
+                jugador1,
+                jugador2
+            }));
+
+            window.location.href = 'juego.html';
+        });
+    </script>
+</body>
+</html>
