@@ -70,27 +70,27 @@ En `juego.html` normalmente se trabajan estas partes:
 ##  Estructura del proyecto
 
 mi-proyecto/
-|-- public/
-|   `-- preguntas.js
-|-- supabase/
-|   `-- migrations/
-|       `-- 2026010813531_create_preguntas_table.sql
-|-- css/
-|   |-- index.css
-|   |-- configuracion.css
-|   |-- juego.css
-|   |-- resultados.css
-|   `-- creditos.css
-|-- js/
-|   |-- preguntas.js
-|   `-- supabaseClient.js
-|-- index.html
-|-- configuracion.html
-|-- juego.html
-|-- resultados.html
-|-- creditos.html
-|-- package.json
-`-- package-lock.json
+├─ public/
+│  └─ preguntas.js
+├─ supabase/
+│  └─ migrations/
+│     └─ 2026010813531_create_preguntas_table.sql
+├─ css/
+│  ├─ index.css
+│  ├─ configuracion.css
+│  ├─ juego.css
+│  ├─ resultados.css
+│  └─ creditos.css
+├─ js/
+│  ├─ preguntas.js
+│  └─ supabaseClient.js
+├─ index.html
+├─ configuracion.html
+├─ juego.html
+├─ resultados.html
+├─ creditos.html
+├─ package.json
+└─ package-lock.json
 
 ---
 
